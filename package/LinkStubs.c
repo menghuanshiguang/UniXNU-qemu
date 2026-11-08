@@ -107,3 +107,31 @@ STUB int boot_progress_pulse_anchor(uintptr_t address, uint64_t bytes, unsigned 
   (void)row;
   return 0;
 }
+
+// Display refresh hooks the tree's NativeLegacyDisplay driver calls. sheng binds the first two to the
+// original IOMobileFramebufferLegacy tick; this port has no GOP backend yet, so they are inert and the
+// vsync observations are counted only where a diagnostic reader asks for them.
+STUB void native_legacy_set_refresh_properties(void *object, uint32_t hz)
+{
+  (void)object;
+  (void)hz;
+}
+
+STUB void native_legacy_vsync_notify(void *object, uint32_t hz)
+{
+  (void)object;
+  (void)hz;
+}
+
+STUB void native_legacy_vsync_observed(unsigned event, unsigned hz)
+{
+  (void)event;
+  (void)hz;
+}
+
+// NativeHidInput registers its button sink here; without sheng's touch panel probe the sink stays unset.
+STUB void native_buttons_set_sink(void (*sink)(void *, uint32_t), void *context)
+{
+  (void)sink;
+  (void)context;
+}
